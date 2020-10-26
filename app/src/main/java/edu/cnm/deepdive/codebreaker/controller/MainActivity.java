@@ -1,5 +1,6 @@
 package edu.cnm.deepdive.codebreaker.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import edu.cnm.deepdive.codebreaker.R;
+import edu.cnm.deepdive.codebreaker.service.GoogleSignInService;
 import edu.cnm.deepdive.codebreaker.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     boolean handled = true;
     //noinspection SwitchStatementWithTooFewBranches
     switch (item.getItemId()) {
+      case R.id.sign_out:
+        logout();
+        break;
       default:
         handled = super.onOptionsItemSelected(item);
     }
@@ -73,6 +78,15 @@ public class MainActivity extends AppCompatActivity {
     navController = ((NavHostFragment) getSupportFragmentManager()
         .findFragmentById(R.id.nav_host_fragment)).getNavController();
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+  }
+
+  private void logout() {
+    GoogleSignInService.getInstance().signOut()
+        .addOnCompleteListener((ignored) -> {
+          Intent intent = new Intent(this, LoginActivity.class)
+              .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+          startActivity(intent);
+        });
   }
 
 }
