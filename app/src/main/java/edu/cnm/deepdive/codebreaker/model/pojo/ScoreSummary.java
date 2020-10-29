@@ -1,9 +1,11 @@
 package edu.cnm.deepdive.codebreaker.model.pojo;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 
 public class ScoreSummary {
 
+  @NonNull
   @ColumnInfo(name = "code_length")
   private int codeLength;
 

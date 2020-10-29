@@ -1,32 +1,39 @@
 package edu.cnm.deepdive.codebreaker.controller;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import edu.cnm.deepdive.codebreaker.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
+import edu.cnm.deepdive.codebreaker.adapter.ScoreSummaryAdapter;
+import edu.cnm.deepdive.codebreaker.databinding.FragmentSummaryBinding;
+import edu.cnm.deepdive.codebreaker.viewmodel.MainViewModel;
 
 public class SummaryFragment extends Fragment {
 
-  public static SummaryFragment newInstance() {
-    SummaryFragment fragment = new SummaryFragment();
-    Bundle args = new Bundle();
-    fragment.setArguments(args);
-    return fragment;
+  private FragmentSummaryBinding binding;
+
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    binding = FragmentSummaryBinding.inflate(inflater);
+    return binding.getRoot();
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-    }
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    FragmentActivity activity = getActivity();
+    //noinspection ConstantConditions
+    MainViewModel viewModel = new ViewModelProvider(activity).get(MainViewModel.class);
+    viewModel.getSummaries().observe(getViewLifecycleOwner(), (summaries) -> {
+      ScoreSummaryAdapter adapter = new ScoreSummaryAdapter(activity, summaries);
+      binding.summaryList.setAdapter(adapter);
+    });
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.fragment_summary, container, false);
-  }
 }
