@@ -21,6 +21,9 @@ public class Game {
 
   private String code;
 
+  @ColumnInfo(name = "code_length", index = true)
+  private int codeLength;
+
   @ColumnInfo(name = "match_key", index = true)
   private UUID matchKey;
 
@@ -45,6 +48,14 @@ public class Game {
 
   public void setCode(String code) {
     this.code = code;
+  }
+
+  public int getCodeLength() {
+    return codeLength;
+  }
+
+  public void setCodeLength(int codeLength) {
+    this.codeLength = codeLength;
   }
 
   public UUID getMatchKey() {
