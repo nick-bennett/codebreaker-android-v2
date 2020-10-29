@@ -19,7 +19,9 @@
   <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="login_failure_message">Unable to sign in with the provided credentials</string>
   <string name="sign_out">Sign out</string>
-  <!-- TODO: Remove or change this placeholder text -->
+  <string name="code_length">Code Length</string>
+  <string name="average_of_guesses">Average # of Guesses</string>
+
   <string-array name="color_labels">
     <item>Red</item>
     <item>Orange</item>
@@ -29,5 +31,7 @@
     <item>Indigo</item>
     <item>Violet</item>
   </string-array>
+
+  <string name="average_guesses_format">%4.2f</string>
 
 </resources>

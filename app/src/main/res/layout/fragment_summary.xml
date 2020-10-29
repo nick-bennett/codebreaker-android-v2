@@ -1,14 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:padding="@dimen/half_margin"
   tools:context=".controller.SummaryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:text="@string/hello_blank_fragment"/>
+  <TextView
+    android:id="@+id/code_length_header"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_static_spacing"
+    android:text="@string/code_length"
+    style="@style/Summary.Header"
+    app:layout_constraintEnd_toStartOf="@id/average_guesses_header"
+    app:layout_constraintHorizontal_weight="3"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
 
-</FrameLayout>
+  <TextView
+    android:id="@+id/average_guesses_header"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_static_spacing"
+    android:text="@string/average_of_guesses"
+    style="@style/Summary.Header"
+    app:layout_constraintBaseline_toBaselineOf="@id/code_length_header"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_weight="7"
+    app:layout_constraintStart_toEndOf="@id/code_length_header"/>
+
+  <androidx.constraintlayout.widget.Barrier
+    android:id="@+id/header_baseline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:barrierDirection="bottom"
+    app:constraint_referenced_ids="average_guesses_header,code_length_header"/>
+
+  <ListView
+    android:id="@+id/summary_list"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/header_baseline"
+    tools:listitem="@layout/item_summary"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+

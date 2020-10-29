@@ -28,4 +28,13 @@
     <item name="android:paddingEnd">@dimen/guess_number_padding</item>
   </style>
 
+  <style name="Summary" parent="TextAppearance.AppCompat.Medium">
+    <item name="android:includeFontPadding">false</item>
+    <item name="android:textAlignment">center</item>
+  </style>
+
+  <style name="Summary.Header">
+    <item name="android:textStyle">bold</item>
+  </style>
+
 </resources>
