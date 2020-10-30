@@ -14,7 +14,7 @@ public class CodebreakerApplication extends Application {
     Stetho.initializeWithDefaults(this);
     GoogleSignInService.setContext(this);
     CodebreakerDatabase.setContext(this);
-    CodebreakerDatabase.getInstance().getScoreDao().delete()
+    CodebreakerDatabase.getInstance().getMatchDao().delete()
         .subscribeOn(Schedulers.io())
         .subscribe();
   }

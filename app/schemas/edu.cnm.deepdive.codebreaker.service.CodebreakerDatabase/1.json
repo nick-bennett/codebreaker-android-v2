@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a3ee6dcbfca3d34480a333efd6db9993",
+    "identityHash": "e72cef1e2eb419ea4e430c013486d88e",
     "entities": [
       {
         "tableName": "Match",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`match_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `match_key` BLOB NOT NULL, `started` INTEGER NOT NULL, `deadline` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`match_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `match_key` BLOB NOT NULL, `started` INTEGER NOT NULL, `deadline` INTEGER NOT NULL, `state` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -29,6 +29,12 @@
           {
             "fieldPath": "deadline",
             "columnName": "deadline",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -63,6 +69,14 @@
               "deadline"
             ],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_Match_deadline` ON `${TABLE_NAME}` (`deadline`)"
+          },
+          {
+            "name": "index_Match_state",
+            "unique": false,
+            "columnNames": [
+              "state"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Match_state` ON `${TABLE_NAME}` (`state`)"
           }
         ],
         "foreignKeys": []
@@ -315,7 +329,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a3ee6dcbfca3d34480a333efd6db9993')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e72cef1e2eb419ea4e430c013486d88e')"
     ]
   }
 }
