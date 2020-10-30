@@ -7,11 +7,16 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 import edu.cnm.deepdive.codebreaker.model.dao.ScoreDao;
+import edu.cnm.deepdive.codebreaker.model.entity.Game;
+import edu.cnm.deepdive.codebreaker.model.entity.Guess;
+import edu.cnm.deepdive.codebreaker.model.entity.Match;
 import edu.cnm.deepdive.codebreaker.model.entity.Score;
 import edu.cnm.deepdive.codebreaker.service.CodebreakerDatabase.Converters;
+import java.nio.ByteBuffer;
 import java.util.Date;
+import java.util.UUID;
 
-@Database(entities = {Score.class}, version = 1, exportSchema = true)
+@Database(entities = {Match.class, Game.class, Guess.class, Score.class}, version = 1, exportSchema = true)
 @TypeConverters({Converters.class})
 public abstract class CodebreakerDatabase extends RoomDatabase {
 
@@ -49,10 +54,28 @@ public abstract class CodebreakerDatabase extends RoomDatabase {
       return (value != null) ? new Date(value) : null;
     }
 
+    @TypeConverter
+    public static byte[] uuidToBytes(UUID value) {
+      byte[] bytes = null;
+      if (value != null) {
+        ByteBuffer buffer = ByteBuffer.allocate(16);
+        buffer.putLong(value.getMostSignificantBits())
+            .putLong(value.getLeastSignificantBits());
+        bytes = buffer.array();
+      }
+      return bytes;
+    }
+
+    @TypeConverter
+    public static UUID bytesToUUID(byte[] value) {
+      UUID uuid = null;
+      if (value != null) {
+        ByteBuffer buffer = ByteBuffer.wrap(value);
+        uuid = new UUID(buffer.getLong(), buffer.getLong());
+      }
+      return uuid;
+    }
+
   }
 
 }
-
-
-
-

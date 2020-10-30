@@ -31,7 +31,7 @@ public class Guess {
   @ColumnInfo(name = "game_id", index = true)
   private long gameId;
 
-  @ColumnInfo(name = "guess_key")
+  @ColumnInfo(name = "guess_key", typeAffinity = ColumnInfo.BLOB)
   private UUID guessKey;
 
   @NonNull
