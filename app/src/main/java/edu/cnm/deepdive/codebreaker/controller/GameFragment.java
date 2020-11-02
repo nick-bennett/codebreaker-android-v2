@@ -21,9 +21,11 @@ import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.adapter.CodeCharacterAdapter;
 import edu.cnm.deepdive.codebreaker.adapter.GuessAdapter;
 import edu.cnm.deepdive.codebreaker.databinding.FragmentGameBinding;
-import edu.cnm.deepdive.codebreaker.model.Game;
+import edu.cnm.deepdive.codebreaker.model.entity.Game;
+import edu.cnm.deepdive.codebreaker.model.entity.Guess;
 import edu.cnm.deepdive.codebreaker.viewmodel.MainViewModel;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameFragment extends Fragment {
@@ -73,9 +75,6 @@ public class GameFragment extends Fragment {
     switch (item.getItemId()) {
       case R.id.new_game:
         startGame();
-        break;
-      case R.id.restart_game:
-        restartGame();
         break;
       case R.id.settings:
         navController.navigate(R.id.action_navigation_game_to_navigation_settings);
@@ -130,17 +129,21 @@ public class GameFragment extends Fragment {
     viewModel.getGame().observe(lifecycleOwner, this::updateGameDisplay);
     viewModel.getSolved().observe(lifecycleOwner, solved ->
         binding.guessControls.setVisibility(solved ? View.INVISIBLE : View.VISIBLE));
+    viewModel.getGuesses().observe(lifecycleOwner, this::updateGuessList);
   }
 
   private void updateGameDisplay(Game game) {
-    adapter.clear();
-    adapter.addAll(game.getGuesses());
-    binding.guessList.setAdapter(adapter);
-    binding.guessList.setSelection(adapter.getCount() - 1);
-    codeLength = game.getLength();
+    codeLength = game.getCodeLength();
     for (int i = 0; i < spinners.length; i++) {
       spinners[i].setVisibility((i < codeLength) ? View.VISIBLE : View.GONE);
     }
+  }
+
+  private void updateGuessList(List<Guess> guesses) {
+    adapter.clear();
+    adapter.addAll(guesses);
+    binding.guessList.setAdapter(adapter);
+    binding.guessList.setSelection(adapter.getCount() - 1);
   }
 
   private void recordGuess() {
@@ -153,10 +156,6 @@ public class GameFragment extends Fragment {
 
   private void startGame() {
     viewModel.startGame();
-  }
-
-  private void restartGame() {
-    viewModel.restartGame();
   }
 
   private static Map<Character, Integer> buildColorMap(char[] chars, int[] values) {

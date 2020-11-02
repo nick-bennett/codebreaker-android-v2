@@ -13,13 +13,18 @@ import edu.cnm.deepdive.codebreaker.model.dao.ScoreDao;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
 import edu.cnm.deepdive.codebreaker.model.entity.Guess;
 import edu.cnm.deepdive.codebreaker.model.entity.Match;
-import edu.cnm.deepdive.codebreaker.model.entity.Score;
+import edu.cnm.deepdive.codebreaker.model.view.Score;
 import edu.cnm.deepdive.codebreaker.service.CodebreakerDatabase.Converters;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.UUID;
 
-@Database(entities = {Match.class, Game.class, Guess.class, Score.class}, version = 1, exportSchema = true)
+@Database(
+    entities = {Match.class, Game.class, Guess.class},
+    views = {Score.class},
+    version = 1,
+    exportSchema = true
+)
 @TypeConverters({Converters.class, Match.State.class})
 public abstract class CodebreakerDatabase extends RoomDatabase {
 

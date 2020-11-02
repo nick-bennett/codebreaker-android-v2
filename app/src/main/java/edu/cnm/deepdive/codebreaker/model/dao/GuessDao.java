@@ -37,4 +37,7 @@ public interface GuessDao {
   @Query("SELECT * FROM Guess WHERE guess_id = :id")
   LiveData<GuessWithGame> select(long id);
 
+  @Query("SELECT * FROM Guess WHERE game_id = :id ORDER BY submitted ASC")
+  LiveData<List<Guess>> selectForGame(long id);
+
 }

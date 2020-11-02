@@ -12,13 +12,6 @@
     tools:ignore="AlwaysShowAction"/>
 
   <item
-    android:id="@+id/restart_game"
-    android:title="@string/restart_game"
-    android:titleCondensed="@string/restart_game_condensed"
-    android:icon="@drawable/ic_replay"
-    app:showAsAction="always"/>
-
-  <item
     android:id="@+id/settings"
     android:title="@string/settings"
     app:showAsAction="never"/>
