@@ -97,7 +97,6 @@ public class MainViewModel extends AndroidViewModel implements LifecycleObserver
     throwable.setValue(null);
     Disposable disposable = repository.guess(game, text)
         .doAfterSuccess((guess) -> {
-//          this.game.postValue(game);
           //noinspection ConstantConditions
           if (guess.getCorrect() == game.getCodeLength()) {
             solved.postValue(true);

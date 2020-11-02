@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e72cef1e2eb419ea4e430c013486d88e",
+    "identityHash": "0b5ca98329b13df8b7d7661f89ab49a7",
     "entities": [
       {
         "tableName": "Match",
@@ -83,7 +83,7 @@
       },
       {
         "tableName": "Game",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`game_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `game_key` BLOB, `match_id` INTEGER, `code` TEXT, `code_length` INTEGER NOT NULL, `started` INTEGER NOT NULL, FOREIGN KEY(`match_id`) REFERENCES `Match`(`match_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`game_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `game_key` BLOB, `match_id` INTEGER, `pool` TEXT NOT NULL, `code` TEXT, `code_length` INTEGER NOT NULL, `started` INTEGER NOT NULL, FOREIGN KEY(`match_id`) REFERENCES `Match`(`match_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -102,6 +102,12 @@
             "columnName": "match_id",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "pool",
+            "columnName": "pool",
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "code",
@@ -269,67 +275,17 @@
             ]
           }
         ]
-      },
-      {
-        "tableName": "Score",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`game_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `guess_count` INTEGER NOT NULL, `code_length` INTEGER NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "game_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "guessCount",
-            "columnName": "guess_count",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "codeLength",
-            "columnName": "code_length",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "game_id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [
-          {
-            "name": "index_Score_timestamp",
-            "unique": false,
-            "columnNames": [
-              "timestamp"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_Score_timestamp` ON `${TABLE_NAME}` (`timestamp`)"
-          },
-          {
-            "name": "index_Score_code_length",
-            "unique": false,
-            "columnNames": [
-              "code_length"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_Score_code_length` ON `${TABLE_NAME}` (`code_length`)"
-          }
-        ],
-        "foreignKeys": []
       }
     ],
-    "views": [],
+    "views": [
+      {
+        "viewName": "Score",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT gm.game_id, gm.pool, gm.code, gm.code_length, gm.started, s.submitted, gs.guess_count FROM Game AS gm INNER JOIN Guess AS s ON s.game_id = gm.game_id AND s.correct = gm.code_length INNER JOIN (SELECT game_id, COUNT(*) AS guess_count FROM Guess GROUP BY game_id) AS gs ON gs.game_id = gm.game_id"
+      }
+    ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e72cef1e2eb419ea4e430c013486d88e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b5ca98329b13df8b7d7661f89ab49a7')"
     ]
   }
 }
