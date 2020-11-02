@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.databinding.ItemGuessBinding;
-import edu.cnm.deepdive.codebreaker.model.Code.Guess;
+import edu.cnm.deepdive.codebreaker.model.entity.Guess;
 import java.util.ArrayList;
 import java.util.Map;
 
