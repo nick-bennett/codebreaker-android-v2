@@ -1,5 +1,15 @@
 apply plugin: 'com.android.application'
 
+static def getProperty(String filename, String property) {
+    Properties properties  = new Properties()
+    properties.load(new FileInputStream(filename))
+    return properties.getProperty(property)
+}
+
+static def quoted(String value) {
+    return "\"${value}\""
+}
+
 android {
 
     compileSdkVersion 29
@@ -13,6 +23,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "CLIENT_ID", quoted(
+                getProperty("$projectDir/../../../services/codebreaker.properties", "client_id"))
 
         javaCompileOptions {
             annotationProcessorOptions {
