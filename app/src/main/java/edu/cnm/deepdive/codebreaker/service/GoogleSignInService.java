@@ -76,10 +76,10 @@ public class GoogleSignInService {
 
   private void setAccount(GoogleSignInAccount account) {
     this.account = account;
-    if (account != null) {
-      //noinspection ConstantConditions
-      Log.d(getClass().getSimpleName(), account.getIdToken());
-    }
+//    if (account != null) {
+//      //noinspection ConstantConditions
+//      Log.d(getClass().getSimpleName(), account.getIdToken());
+//    }
   }
 
   private static class InstanceHolder {
