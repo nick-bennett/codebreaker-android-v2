@@ -3,16 +3,21 @@ package edu.cnm.deepdive.codebreaker.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import edu.cnm.deepdive.codebreaker.BuildConfig;
+import edu.cnm.deepdive.codebreaker.model.entity.Match;
 import edu.cnm.deepdive.codebreaker.model.entity.User;
 import io.reactivex.Single;
+import java.util.UUID;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface CodebreakerWebService {
 
