@@ -44,13 +44,13 @@ public class GameRepository {
   public Single<Game> newGame(String pool, int codeLength, Random rng) {
     return Single.fromCallable(() -> createGame(pool, codeLength, rng))
         .subscribeOn(Schedulers.computation())
+        .observeOn(Schedulers.io())
         .flatMap((game) -> gameDao.insert(game)
             .map((id) -> {
               game.setId(id);
               return game;
             })
-        )
-        .subscribeOn(Schedulers.io());
+        );
   }
 
   public Single<Guess> guess(Game game, String text) {
@@ -67,13 +67,13 @@ public class GameRepository {
       return guess;
     })
         .subscribeOn(Schedulers.computation())
+        .observeOn(Schedulers.io())
         .flatMap((guess) -> guessDao.insert(guess)
             .map((id) -> {
               guess.setId(id);
               return guess;
             })
-        )
-        .subscribeOn(Schedulers.io());
+        );
   }
 
   public LiveData<List<Guess>> getGuesses(Game game) {
