@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     userRepository.createUser(account)
         .subscribe(
             (user) -> {
-              Intent intent = new Intent(this, MainActivity.class)
+              Intent intent = new Intent(this, NavigationActivity.class)
                   .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
               startActivity(intent);
             },
