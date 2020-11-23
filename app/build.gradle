@@ -96,7 +96,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$room_version"
 
     // Google Sign In dependency
-    implementation 'com.google.android.gms:play-services-auth:18.1.0'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
     // Gson (Google JSON parser) dependency
     implementation 'com.google.code.gson:gson:2.8.6'

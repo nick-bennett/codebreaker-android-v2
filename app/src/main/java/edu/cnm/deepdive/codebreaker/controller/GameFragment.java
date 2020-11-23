@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.adapter.CodeCharacterAdapter;
 import edu.cnm.deepdive.codebreaker.adapter.GuessAdapter;
+import edu.cnm.deepdive.codebreaker.adapter.GuessRecyclerAdapter;
 import edu.cnm.deepdive.codebreaker.databinding.FragmentGameBinding;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
 import edu.cnm.deepdive.codebreaker.model.entity.Guess;
@@ -29,7 +30,7 @@ public class GameFragment extends Fragment {
   private Map<Character, String> colorLabelMap;
   private Character[] codeCharacters;
   private MainViewModel viewModel;
-  private GuessAdapter adapter;
+  private GuessRecyclerAdapter adapter;
   private int codeLength;
   private FragmentGameBinding binding;
   private Spinner[] spinners;
@@ -81,7 +82,8 @@ public class GameFragment extends Fragment {
   private void setupViewModel() {
     FragmentActivity activity = getActivity();
     //noinspection ConstantConditions
-    adapter = new GuessAdapter(activity, colorValueMap, colorLabelMap);
+    adapter = new GuessRecyclerAdapter(activity, colorValueMap, colorLabelMap);
+    binding.guessList.setAdapter(adapter);
     viewModel = new ViewModelProvider(activity).get(MainViewModel.class);
     getLifecycle().addObserver(viewModel);
     LifecycleOwner lifecycleOwner = getViewLifecycleOwner();
@@ -117,10 +119,11 @@ public class GameFragment extends Fragment {
   }
 
   private void updateGuessList(List<Guess> guesses) {
-    adapter.clear();
-    adapter.addAll(guesses);
-    binding.guessList.setAdapter(adapter);
-    binding.guessList.setSelection(adapter.getCount() - 1);
+    adapter.getGuesses().clear();
+    adapter.getGuesses().addAll(guesses);
+    adapter.notifyItemInserted(guesses.size() - 1);
+    //noinspection ConstantConditions
+    binding.guessList.getLayoutManager().scrollToPosition(guesses.size() - 1);
   }
 
   private void recordGuess() {
