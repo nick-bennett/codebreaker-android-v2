@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: "androidx.navigation.safeargs"
 
 static def getProperty(String filename, String property) {
     Properties properties  = new Properties()
@@ -76,6 +77,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment:$navigation_version"
     implementation "androidx.navigation:navigation-ui:$navigation_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     // Lifecycle (LiveData and ViewModel) dependencies
     def lifecycle_version = '2.2.0'
@@ -95,7 +97,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$room_version"
 
     // Google Sign In dependency
-    implementation 'com.google.android.gms:play-services-auth:18.1.0'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
     // Gson (Google JSON parser) dependency
     implementation 'com.google.code.gson:gson:2.8.6'

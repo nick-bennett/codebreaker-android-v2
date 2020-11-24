@@ -16,13 +16,4 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     setPreferencesFromResource(R.xml.preferences, rootKey);
   }
 
-  @SuppressWarnings("ConstantConditions")
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
-    actionBar.setDisplayShowHomeEnabled(true);
-  }
-
 }

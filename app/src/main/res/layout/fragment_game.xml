@@ -7,10 +7,14 @@
   android:layout_height="match_parent"
   tools:context=".controller.GameFragment">
 
-  <ListView
+  <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/guess_list"
     android:layout_width="match_parent"
     android:layout_height="0dp"
+    android:orientation="vertical"
+    android:background="#E0E0E0"
+    android:padding="@dimen/half_static_spacing"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintBottom_toTopOf="@id/guess_controls"/>
@@ -40,14 +44,5 @@
       android:text="@string/submit"/>
 
   </LinearLayout>
-
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/summary"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_summary"
-    app:useCompatPadding="true"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/guess_controls"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

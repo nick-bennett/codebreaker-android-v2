@@ -3,9 +3,6 @@ package edu.cnm.deepdive.codebreaker.controller;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
@@ -15,11 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.adapter.CodeCharacterAdapter;
 import edu.cnm.deepdive.codebreaker.adapter.GuessAdapter;
+import edu.cnm.deepdive.codebreaker.adapter.GuessRecyclerAdapter;
 import edu.cnm.deepdive.codebreaker.databinding.FragmentGameBinding;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
 import edu.cnm.deepdive.codebreaker.model.entity.Guess;
@@ -34,17 +30,10 @@ public class GameFragment extends Fragment {
   private Map<Character, String> colorLabelMap;
   private Character[] codeCharacters;
   private MainViewModel viewModel;
-  private GuessAdapter adapter;
+  private GuessRecyclerAdapter adapter;
   private int codeLength;
   private FragmentGameBinding binding;
   private Spinner[] spinners;
-  private NavController navController;
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setHasOptionsMenu(true);
-  }
 
   @Nullable
   @Override
@@ -59,30 +48,7 @@ public class GameFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    setupNavigation(view);
     setupViewModel();
-  }
-
-  @Override
-  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-    super.onCreateOptionsMenu(menu, inflater);
-    inflater.inflate(R.menu.game_options, menu);
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    boolean handled = true;
-    switch (item.getItemId()) {
-      case R.id.new_game:
-        startGame();
-        break;
-      case R.id.settings:
-        navController.navigate(R.id.action_navigation_game_to_navigation_settings);
-        break;
-      default:
-        handled = super.onOptionsItemSelected(item);
-    }
-    return handled;
   }
 
   private void setupMaps() {
@@ -99,8 +65,6 @@ public class GameFragment extends Fragment {
 
   private void setupViews() {
     binding.submit.setOnClickListener((view) -> recordGuess());
-    binding.summary.setOnClickListener((view) ->
-        navController.navigate(R.id.action_navigation_game_to_navigation_summary));
     int maxCodeLength = getResources().getInteger(R.integer.code_length_pref_max);
     spinners = new Spinner[maxCodeLength];
     LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -115,14 +79,11 @@ public class GameFragment extends Fragment {
     }
   }
 
-  private void setupNavigation(View root) {
-    navController = Navigation.findNavController(root);
-  }
-
   private void setupViewModel() {
     FragmentActivity activity = getActivity();
     //noinspection ConstantConditions
-    adapter = new GuessAdapter(activity, colorValueMap, colorLabelMap);
+    adapter = new GuessRecyclerAdapter(activity, colorValueMap, colorLabelMap);
+    binding.guessList.setAdapter(adapter);
     viewModel = new ViewModelProvider(activity).get(MainViewModel.class);
     getLifecycle().addObserver(viewModel);
     LifecycleOwner lifecycleOwner = getViewLifecycleOwner();
@@ -158,10 +119,11 @@ public class GameFragment extends Fragment {
   }
 
   private void updateGuessList(List<Guess> guesses) {
-    adapter.clear();
-    adapter.addAll(guesses);
-    binding.guessList.setAdapter(adapter);
-    binding.guessList.setSelection(adapter.getCount() - 1);
+    adapter.getGuesses().clear();
+    adapter.getGuesses().addAll(guesses);
+    adapter.notifyItemInserted(guesses.size() - 1);
+    //noinspection ConstantConditions
+    binding.guessList.getLayoutManager().scrollToPosition(guesses.size() - 1);
   }
 
   private void recordGuess() {
