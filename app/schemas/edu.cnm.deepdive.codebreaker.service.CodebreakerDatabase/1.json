@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9d2013556ae950131215e4d72566c1f5",
+    "identityHash": "254fd302d9c7b9e5c9438a230a485fb4",
     "entities": [
       {
         "tableName": "user_profile",
@@ -53,7 +53,7 @@
       },
       {
         "tableName": "Match",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`match_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `match_key` BLOB NOT NULL, `started` INTEGER NOT NULL, `deadline` INTEGER NOT NULL, `state` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`match_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `match_key` BLOB NOT NULL, `started` INTEGER NOT NULL, `deadline` INTEGER NOT NULL, `code_length` INTEGER NOT NULL, `state` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -76,6 +76,12 @@
           {
             "fieldPath": "deadline",
             "columnName": "deadline",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "codeLength",
+            "columnName": "code_length",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -332,7 +338,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9d2013556ae950131215e4d72566c1f5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '254fd302d9c7b9e5c9438a230a485fb4')"
     ]
   }
 }

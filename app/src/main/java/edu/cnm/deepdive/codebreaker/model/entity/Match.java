@@ -3,9 +3,12 @@ package edu.cnm.deepdive.codebreaker.model.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,19 +26,35 @@ public class Match {
 
   @NonNull
   @ColumnInfo(name = "match_key", typeAffinity = ColumnInfo.BLOB)
+  @Expose
+  @SerializedName("id")
   private UUID matchKey;
 
   @NonNull
   @ColumnInfo(index = true)
+  @Expose
   private Date started;
 
   @NonNull
   @ColumnInfo(index = true)
+  @Expose
   private Date deadline;
+
+  @ColumnInfo(name = "code_length")
+  @Expose
+  private int codeLength;
+
+  @Ignore
+  @Expose
+  private String pool;
+
+  @Ignore
+  @Expose
+  private int gameCount = 5;
 
   @NonNull
   @ColumnInfo(index = true)
-  private State state;
+  private State state = State.IN_PROGRESS;
 
   public long getId() {
     return id;
@@ -70,6 +89,30 @@ public class Match {
 
   public void setDeadline(@NonNull Date deadline) {
     this.deadline = deadline;
+  }
+
+  public int getCodeLength() {
+    return codeLength;
+  }
+
+  public void setCodeLength(int codeLength) {
+    this.codeLength = codeLength;
+  }
+
+  public String getPool() {
+    return pool;
+  }
+
+  public void setPool(String pool) {
+    this.pool = pool;
+  }
+
+  public int getGameCount() {
+    return gameCount;
+  }
+
+  public void setGameCount(int gameCount) {
+    this.gameCount = gameCount;
   }
 
   @NonNull

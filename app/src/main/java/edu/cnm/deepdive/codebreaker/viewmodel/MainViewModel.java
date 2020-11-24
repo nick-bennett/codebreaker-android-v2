@@ -15,8 +15,10 @@ import androidx.preference.PreferenceManager;
 import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.model.entity.Guess;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
+import edu.cnm.deepdive.codebreaker.model.entity.Match;
 import edu.cnm.deepdive.codebreaker.model.pojo.ScoreSummary;
 import edu.cnm.deepdive.codebreaker.service.GameRepository;
+import edu.cnm.deepdive.codebreaker.service.MatchRepository;
 import edu.cnm.deepdive.codebreaker.service.UserRepository;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -39,17 +41,19 @@ public class MainViewModel extends AndroidViewModel implements LifecycleObserver
   private final String codeLengthPrefKey;
   private final int codeLengthPrefDefault;
   private final SharedPreferences preferences;
-  private final GameRepository repository;
+  private final GameRepository gameRepository;
+  private final MatchRepository matchRepository;
   private final CompositeDisposable pending;
 
   public MainViewModel(@NonNull Application application) {
     super(application);
     userRepository = new UserRepository(application);
-    repository = new GameRepository(application);
+    gameRepository = new GameRepository(application);
+    matchRepository = new MatchRepository(application);
     game = new MutableLiveData<>();
     guess = new MutableLiveData<>();
     solved = new MutableLiveData<>();
-    guesses = Transformations.switchMap(game, repository::getGuesses);
+    guesses = Transformations.switchMap(game, gameRepository::getGuesses);
     throwable = new MutableLiveData<>();
     rng = new SecureRandom();
     codeLengthPrefKey = application.getString(R.string.code_length_pref_key);
@@ -59,6 +63,7 @@ public class MainViewModel extends AndroidViewModel implements LifecycleObserver
     pending = new CompositeDisposable();
     startGame();
     testRoundTrip();
+    startMatch();
   }
 
   public LiveData<Game> getGame() {
@@ -85,7 +90,7 @@ public class MainViewModel extends AndroidViewModel implements LifecycleObserver
     throwable.setValue(null);
     int codeLength = preferences.getInt(codeLengthPrefKey, codeLengthPrefDefault);
     pending.add(
-        repository.newGame(POOL, codeLength, rng)
+        gameRepository.newGame(POOL, codeLength, rng)
             .doAfterSuccess((game) -> {
               guess.postValue(null);
               solved.postValue(false);
@@ -100,7 +105,7 @@ public class MainViewModel extends AndroidViewModel implements LifecycleObserver
   public void guess(String text) {
     Game game = this.game.getValue();
     throwable.setValue(null);
-    Disposable disposable = repository.guess(game, text)
+    Disposable disposable = gameRepository.guess(game, text)
         .doAfterSuccess((guess) -> {
           //noinspection ConstantConditions
           if (guess.getCorrect() == game.getCodeLength()) {
@@ -115,7 +120,22 @@ public class MainViewModel extends AndroidViewModel implements LifecycleObserver
   }
 
   public LiveData<List<ScoreSummary>> getSummaries() {
-    return repository.getSummaries();
+    return gameRepository.getSummaries();
+  }
+
+  public void startMatch() {
+    int codeLength = preferences.getInt(codeLengthPrefKey, codeLengthPrefDefault);
+    Match match = new Match();
+    match.setCodeLength(codeLength);
+    match.setPool(POOL);
+    match.setDeadline(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000));
+    pending.add(
+        matchRepository.add(match)
+            .subscribe(
+                (m) -> Log.d(getClass().getSimpleName(), m.getMatchKey().toString()),
+                throwable::postValue
+            )
+    );
   }
 
   @OnLifecycleEvent(Event.ON_STOP)
