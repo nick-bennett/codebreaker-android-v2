@@ -22,4 +22,10 @@
     android:name="edu.cnm.deepdive.codebreaker.controller.SummaryFragment"
     tools:layout="@layout/fragment_summary"/>
 
+  <fragment
+    android:id="@+id/navigation_match"
+    android:label="@string/title_matches"
+    android:name="edu.cnm.deepdive.codebreaker.controller.MatchFragment"
+    tools:layout="@layout/fragment_match"/>
+
 </navigation>

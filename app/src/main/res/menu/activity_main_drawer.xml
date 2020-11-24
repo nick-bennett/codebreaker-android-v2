@@ -13,6 +13,10 @@
       android:title="@string/title_current_game"/>
 
     <item
+      android:id="@+id/navigation_match"
+      android:title="@string/title_matches"/>
+
+    <item
       android:id="@+id/navigation_summary"
       android:title="@string/title_summary"
       android:icon="@drawable/ic_summary"/>
